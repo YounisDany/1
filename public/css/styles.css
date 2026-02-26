@@ -11,6 +11,7 @@ body {
   font-family: 'Inter', sans-serif;
   background: radial-gradient(circle at 20% 20%, #1d4ed8 0%, #0f172a 45%, #020617 100%);
   color: var(--text);
+  direction: rtl;
 }
 
 .app-shell { max-width: 1400px; margin: 0 auto; padding: 24px; }
@@ -91,6 +92,7 @@ textarea { min-height: 220px; resize: vertical; }
 .error { color: #fecaca; min-height: 20px; }
 
 #suggestions { padding-left: 18px; }
+#suggestions { padding-right: 18px; padding-left: 0; }
 #suggestions li { margin-bottom: 8px; }
 
 @keyframes rise { from { opacity: 0; transform: translateY(12px);} to { opacity: 1; transform: translateY(0);} }

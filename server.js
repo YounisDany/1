@@ -18,7 +18,11 @@ const HF_TEXT_MODEL = process.env.HF_TEXT_MODEL || 'mistralai/Mistral-7B-Instruc
 const HF_IMAGE_MODEL = process.env.HF_IMAGE_MODEL || 'stabilityai/stable-diffusion-xl-base-1.0';
 
 const DEFAULT_GENERATED_DIR = path.join(__dirname, 'generated');
-const GENERATED_DIR = process.env.GENERATED_DIR || process.env.TMPDIR || DEFAULT_GENERATED_DIR;
+const SERVERLESS_TMP_DIR = '/tmp/generated';
+const IS_SERVERLESS_RUNTIME =
+  __dirname.startsWith('/var/task') || Boolean(process.env.VERCEL) || Boolean(process.env.AWS_EXECUTION_ENV);
+const GENERATED_DIR =
+  process.env.GENERATED_DIR || process.env.TMPDIR || (IS_SERVERLESS_RUNTIME ? SERVERLESS_TMP_DIR : DEFAULT_GENERATED_DIR);
 const SLIDES_DIR = path.join(GENERATED_DIR, 'slides');
 const IMAGES_DIR = path.join(GENERATED_DIR, 'images');
 
@@ -58,14 +62,14 @@ function safeJsonParse(text) {
 
 function fallbackSlides(topic, slideCount, tone) {
   return Array.from({ length: slideCount }).map((_, idx) => ({
-    title: `${topic}: Section ${idx + 1}`,
+    title: `${topic} - الشريحة ${idx + 1}`,
     bullets: [
-      `Tone: ${tone}`,
-      `Key insight ${idx + 1} for ${topic}`,
-      `Action item ${idx + 1}`
+      `النبرة المطلوبة: ${tone}`,
+      `الفكرة الرئيسية ${idx + 1} حول ${topic}`,
+      `خطوة عملية مقترحة ${idx + 1}`
     ],
-    paragraph: `This slide summarizes a critical part of ${topic} with practical context and concise talking points.`,
-    notes: `Expand with examples and data specific to your audience.`
+    paragraph: `تلخص هذه الشريحة جانبًا مهمًا من ${topic} مع شرح موجز وأمثلة عملية تناسب الجمهور العربي.`,
+    notes: `يمكنك إضافة أمثلة محلية وإحصاءات حديثة لدعم الرسالة.`
   }));
 }
 
@@ -74,7 +78,7 @@ async function generateSlidesWithHF({ topic, tone, slideCount }) {
     return fallbackSlides(topic, slideCount, tone);
   }
 
-  const prompt = `You are a presentation architect. Return ONLY valid JSON with this shape:\n{\n  "slides": [\n    {"title":"...","bullets":["..."],"paragraph":"...","notes":"..."}\n  ]\n}\nGenerate ${slideCount} slides about "${topic}" in a ${tone} tone.\nEach slide must include 3-5 concise bullets and 1 short paragraph.`;
+  const prompt = `أنت خبير في إعداد العروض التقديمية باللغة العربية. أعد فقط JSON صالح بهذا الشكل:\n{\n  "slides": [\n    {"title":"...","bullets":["..."],"paragraph":"...","notes":"..."}\n  ]\n}\nأنشئ ${slideCount} شرائح حول "${topic}" بنبرة ${tone}.\nالشروط:\n- الكتابة بالعربية الفصحى المبسطة.\n- العنوان قصير وجذاب لكل شريحة.\n- 3 إلى 5 نقاط موجزة لكل شريحة.\n- فقرة قصيرة داعمة.\n- ملاحظات متحدث اختيارية باللغة العربية.`;
 
   const response = await fetch(`https://api-inference.huggingface.co/models/${HF_TEXT_MODEL}`, {
     method: 'POST',
@@ -100,7 +104,7 @@ async function generateSlidesWithHF({ topic, tone, slideCount }) {
 
   return parsed.slides.slice(0, slideCount).map((slide, i) => ({
     title: slide.title || `${topic} ${i + 1}`,
-    bullets: Array.isArray(slide.bullets) && slide.bullets.length ? slide.bullets : [`Key point ${i + 1}`],
+    bullets: Array.isArray(slide.bullets) && slide.bullets.length ? slide.bullets : [`نقطة رئيسية ${i + 1}`],
     paragraph: slide.paragraph || '',
     notes: slide.notes || ''
   }));
@@ -110,7 +114,7 @@ function slidesToMarkdown(slides) {
   return slides
     .map((slide) => {
       const bulletText = slide.bullets.map((point) => `- ${point}`).join('\n');
-      const notes = slide.notes ? `\n\n> Notes: ${slide.notes}` : '';
+      const notes = slide.notes ? `\n\n> ملاحظات: ${slide.notes}` : '';
       return `# ${slide.title}\n${bulletText}\n\n${slide.paragraph || ''}${notes}`;
     })
     .join('\n\n');
@@ -135,7 +139,7 @@ async function fetchImageForSlide(slide, index) {
         method: 'POST',
         headers: { Authorization: `Bearer ${HF_TOKEN}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          inputs: `${slide.title}, professional minimal presentation style, soft lighting, high quality`,
+          inputs: `${slide.title}, Arabic business presentation style, modern minimal layout, high quality`,
           options: { wait_for_model: true }
         })
       });
@@ -260,10 +264,10 @@ app.post('/api/regenerate-slide', async (req, res) => {
 app.post('/api/design-suggestions', (req, res) => {
   const { topic, tone } = req.body;
   const hints = [
-    `Use high-contrast headings for "${topic}" for readability in large rooms.`,
-    `Given a ${tone} tone, maintain concise bullets with one message per line.`,
-    'Balance text-heavy slides by inserting one visual slide after every two content slides.',
-    'Use consistent iconography and keep color accents to one primary plus one highlight.'
+    `استخدم عناوين واضحة وعالية التباين في عرض "${topic}" لتسهيل القراءة داخل القاعات.`,
+    `بما أن النبرة المطلوبة هي (${tone})، اجعل كل سطر نقطة واحدة فقط بدون إطالة.`,
+    'وازن بين النص والصور عبر إضافة شريحة مرئية بعد كل شريحتين نصيتين.',
+    'حافظ على هوية بصرية موحدة: لون رئيسي واحد مع لون مساعد للإبراز.'
   ];
   res.json({ hints });
 });

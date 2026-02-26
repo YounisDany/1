@@ -3,6 +3,7 @@
 A production-oriented full-stack web app that generates complete slide decks from a topic using Hugging Face inference.
 
 ## Features
+- Arabic-first experience (RTL UI and Arabic-oriented prompts/content)
 - AI content generation into structured Markdown
 - AI/fallback image generation per slide
 - HTML slide rendering with animated modern design
@@ -95,3 +96,4 @@ Use Node 20+, include Chromium deps for Puppeteer.
 ## Notes
 - If Hugging Face is unavailable, app falls back to deterministic slide content and Picsum images.
 - You can replace image fallback with Unsplash/Pexels API integration in `fetchImageForSlide()`.
+- For serverless deployments where `/var/task` is read-only, the app auto-falls back to `/tmp/generated` unless `GENERATED_DIR` is explicitly provided.

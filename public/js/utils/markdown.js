@@ -9,7 +9,8 @@ export function markdownToSlides(markdown) {
     const title = lines[0].replace(/^#\s*/, '').trim();
     const bullets = lines.filter((line) => line.startsWith('- ')).map((line) => line.slice(2));
     const paragraph = lines.filter((line) => line && !line.startsWith('#') && !line.startsWith('- ') && !line.startsWith('>')).join(' ');
-    const notes = lines.find((line) => line.startsWith('> Notes:'))?.replace('> Notes:', '').trim() || '';
+    const notesLine = lines.find((line) => line.startsWith('> Notes:') || line.startsWith('> ملاحظات:')) || '';
+    const notes = notesLine.replace('> Notes:', '').replace('> ملاحظات:', '').trim();
 
     return { title, bullets, paragraph, notes };
   });

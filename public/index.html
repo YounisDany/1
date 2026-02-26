@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI Presentation Generator</title>
+    <title>مولّد العروض التقديمية بالذكاء الاصطناعي</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -12,41 +12,41 @@
   <body>
     <div class="app-shell">
       <header>
-        <h1>AI Presentation Generator</h1>
-        <p>Create polished slides with AI content, images, and one-click exports.</p>
+        <h1>مولّد العروض التقديمية بالذكاء الاصطناعي</h1>
+        <p>أنشئ عروضًا عربية احترافية تلقائيًا مع محتوى وصور وتصدير بضغطة واحدة.</p>
       </header>
 
       <main>
         <section class="controls glass">
-          <h2>Generate Deck</h2>
+          <h2>إنشاء عرض جديد</h2>
           <form id="generatorForm">
-            <label>Topic<input type="text" id="topic" required placeholder="e.g. Future of Generative AI" /></label>
-            <label>Tone
+            <label>الموضوع<input type="text" id="topic" required placeholder="مثال: مستقبل الذكاء الاصطناعي التوليدي" /></label>
+            <label>النبرة
               <select id="tone">
-                <option>Professional</option>
-                <option>Inspirational</option>
-                <option>Educational</option>
-                <option>Technical</option>
+                <option>احترافية</option>
+                <option>تحفيزية</option>
+                <option>تعليمية</option>
+                <option>تقنية</option>
               </select>
             </label>
-            <label>Slides<input type="number" id="slideCount" min="3" max="15" value="6" /></label>
-            <label>Theme
+            <label>عدد الشرائح<input type="number" id="slideCount" min="3" max="15" value="6" /></label>
+            <label>النمط
               <select id="theme">
-                <option value="corporate">Corporate</option>
-                <option value="light">Light</option>
-                <option value="dark">Dark</option>
-                <option value="creative">Creative</option>
+                <option value="corporate">شركات</option>
+                <option value="light">فاتح</option>
+                <option value="dark">داكن</option>
+                <option value="creative">إبداعي</option>
               </select>
             </label>
-            <button type="submit" id="generateBtn">Generate Presentation</button>
+            <button type="submit" id="generateBtn">إنشاء العرض</button>
           </form>
-          <div id="loading" class="loading hidden">Generating deck<span></span><span></span><span></span></div>
+          <div id="loading" class="loading hidden">جارٍ إنشاء العرض<span></span><span></span><span></span></div>
           <p id="error" class="error"></p>
 
           <div class="actions">
-            <button id="suggestBtn" type="button">AI Design Suggestions</button>
-            <button id="exportPdfBtn" type="button" disabled>Export PDF</button>
-            <button id="exportPptBtn" type="button" disabled>Export PPTX</button>
+            <button id="suggestBtn" type="button">اقتراحات تصميم ذكية</button>
+            <button id="exportPdfBtn" type="button" disabled>تصدير PDF</button>
+            <button id="exportPptBtn" type="button" disabled>تصدير PPTX</button>
           </div>
 
           <ul id="suggestions"></ul>
@@ -54,13 +54,13 @@
 
         <section class="workspace">
           <article class="panel glass">
-            <h3>Slide Editor (Markdown)</h3>
-            <textarea id="markdownEditor" placeholder="Generated markdown appears here..."></textarea>
-            <button id="applyEditsBtn" type="button">Apply Markdown Edits</button>
+            <h3>محرر الشرائح (Markdown)</h3>
+            <textarea id="markdownEditor" placeholder="سيظهر محتوى الشرائح هنا..."></textarea>
+            <button id="applyEditsBtn" type="button">تطبيق التعديلات</button>
           </article>
 
           <article class="panel glass">
-            <h3>Presentation Preview</h3>
+            <h3>معاينة العرض</h3>
             <div id="slidesContainer" class="slides"></div>
           </article>
         </section>

@@ -24,9 +24,9 @@ function setError(message = '') {
 
 function autoSelectTheme(topic) {
   const t = topic.toLowerCase();
-  if (/finance|enterprise|strategy|business/.test(t)) return 'corporate';
-  if (/art|design|brand|creative|story/.test(t)) return 'creative';
-  if (/security|cloud|devops|data/.test(t)) return 'dark';
+  if (/finance|enterprise|strategy|business|شركة|تجاره|أعمال|اعمال|مالية|استراتيجية/.test(t)) return 'corporate';
+  if (/art|design|brand|creative|story|تصميم|ابداع|إبداع|علامة|هوية/.test(t)) return 'creative';
+  if (/security|cloud|devops|data|امن|أمن|سحابة|بيانات|تقنية/.test(t)) return 'dark';
   return 'light';
 }
 
@@ -42,7 +42,7 @@ function renderSlides(slides, theme) {
         <h2 contenteditable="true" data-field="title" data-idx="${idx}">${slide.title}</h2>
         <ul>${slide.bullets.map((b) => `<li>${b}</li>`).join('')}</ul>
         <p>${slide.paragraph || ''}</p>
-        <button type="button" data-regenerate="${idx}">Regenerate Slide</button>
+        <button type="button" data-regenerate="${idx}">إعادة توليد الشريحة</button>
       </div>`;
     slidesContainer.appendChild(section);
   });
@@ -73,7 +73,7 @@ function bindRegenerateButtons() {
 
 function currentDeckToMarkdown() {
   return currentDeck.slides
-    .map((slide) => `# ${slide.title}\n${slide.bullets.map((b) => `- ${b}`).join('\n')}\n\n${slide.paragraph || ''}\n${slide.notes ? `\n> Notes: ${slide.notes}` : ''}`)
+    .map((slide) => `# ${slide.title}\n${slide.bullets.map((b) => `- ${b}`).join('\n')}\n\n${slide.paragraph || ''}\n${slide.notes ? `\n> ملاحظات: ${slide.notes}` : ''}`)
     .join('\n\n');
 }
 
@@ -112,7 +112,7 @@ applyEditsBtn.addEventListener('click', () => {
 });
 
 suggestBtn.addEventListener('click', async () => {
-  const topic = document.getElementById('topic').value || 'your topic';
+  const topic = document.getElementById('topic').value || 'موضوع العرض';
   const tone = document.getElementById('tone').value;
   try {
     const { hints } = await getDesignSuggestions({ topic, tone });
