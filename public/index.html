@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>مولّد العروض التقديمية بالذكاء الاصطناعي</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header>
+        <h1>مولّد العروض التقديمية بالذكاء الاصطناعي</h1>
+        <p>أنشئ عروضًا عربية احترافية تلقائيًا مع محتوى وصور وتصدير بضغطة واحدة.</p>
+      </header>
+
+      <main>
+        <section class="controls glass">
+          <h2>إنشاء عرض جديد</h2>
+          <form id="generatorForm">
+            <label>الموضوع<input type="text" id="topic" required placeholder="مثال: مستقبل الذكاء الاصطناعي التوليدي" /></label>
+            <label>النبرة
+              <select id="tone">
+                <option>احترافية</option>
+                <option>تحفيزية</option>
+                <option>تعليمية</option>
+                <option>تقنية</option>
+              </select>
+            </label>
+            <label>عدد الشرائح<input type="number" id="slideCount" min="3" max="15" value="6" /></label>
+            <label>النمط
+              <select id="theme">
+                <option value="corporate">شركات</option>
+                <option value="light">فاتح</option>
+                <option value="dark">داكن</option>
+                <option value="creative">إبداعي</option>
+              </select>
+            </label>
+            <button type="submit" id="generateBtn">إنشاء العرض</button>
+          </form>
+          <div id="loading" class="loading hidden">جارٍ إنشاء العرض<span></span><span></span><span></span></div>
+          <p id="error" class="error"></p>
+
+          <div class="actions">
+            <button id="suggestBtn" type="button">اقتراحات تصميم ذكية</button>
+            <button id="exportPdfBtn" type="button" disabled>تصدير PDF</button>
+            <button id="exportPptBtn" type="button" disabled>تصدير PPTX</button>
+          </div>
+
+          <ul id="suggestions"></ul>
+        </section>
+
+        <section class="workspace">
+          <article class="panel glass">
+            <h3>محرر الشرائح (Markdown)</h3>
+            <textarea id="markdownEditor" placeholder="سيظهر محتوى الشرائح هنا..."></textarea>
+            <button id="applyEditsBtn" type="button">تطبيق التعديلات</button>
+          </article>
+
+          <article class="panel glass">
+            <h3>معاينة العرض</h3>
+            <div id="slidesContainer" class="slides"></div>
+          </article>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="/js/app.js"></script>
+  </body>
+</html>
